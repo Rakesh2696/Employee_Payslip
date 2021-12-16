@@ -1,4 +1,5 @@
-﻿using Employee_Payslip.Models;
+﻿using DataModel.Repositories;
+using Employee_Payslip.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,14 +8,17 @@ namespace Employee_Payslip.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork _IUnitOfWork;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
+            _IUnitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
+            var list = _IUnitOfWork.IUserRepository.GetAll();
             return View();
         }
         public IActionResult SalaryReport()
