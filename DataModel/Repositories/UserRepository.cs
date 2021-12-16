@@ -1,4 +1,5 @@
 ﻿using DataModel.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace DataModel.Repositories
     public interface IUserRepository
     {
         List<User> GetAll();
+        User GetLogIn(User user);
     }
     public class UserRepository: IUserRepository
     {
@@ -21,7 +23,12 @@ namespace DataModel.Repositories
         }
         public List<User> GetAll()
         {
-            return _context.Users.ToList();
+            return _context.Users.Include(x=>x.UserTypeModel).ToList();
+        }
+
+        public User? GetLogIn(User user)
+        {
+            return _context.Users.Include(x => x.UserTypeModel).Where(x => x.EmailId == user.EmailId && x.Password == user.Password && x.UserTypeModel.UserTypeCode==user.UserType)?.FirstOrDefault();
         }
     }
 }

@@ -1,5 +1,4 @@
-using DataModel.Models;
-using DataModel.Repositories;
+
 using Microsoft.EntityFrameworkCore;
 namespace Employee_Payslip
 {

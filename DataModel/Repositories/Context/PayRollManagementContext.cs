@@ -22,13 +22,12 @@ namespace DataModel.Models
         public virtual DbSet<EmpolyeeSalaryDetail> EmpolyeeSalaryDetails { get; set; } = null!;
         public virtual DbSet<Grade> Grades { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
+        public virtual DbSet<UserType> UserTypes { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-               // optionsBuilder.UseSqlServer("Server=DESKTOP-BGFG5L3;Database=PayRoll-Management;Trusted_Connection=True;");
             }
         }
 
@@ -80,7 +79,10 @@ namespace DataModel.Models
                     .IsUnicode(false)
                     .HasColumnName("emp_mail_id");
 
-                entity.Property(e => e.EmpMobNumber).HasColumnName("emp_mob_number");
+                entity.Property(e => e.EmpMobNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("emp_mob_number");
 
                 entity.Property(e => e.EmpName)
                     .HasMaxLength(100)
@@ -104,10 +106,17 @@ namespace DataModel.Models
                     .IsUnicode(false)
                     .HasColumnName("emp_titile");
 
+                entity.Property(e => e.UserId).HasColumnName("User_id");
+
                 entity.HasOne(d => d.Dept)
                     .WithMany(p => p.Employees)
                     .HasForeignKey(d => d.DeptId)
                     .HasConstraintName("FK_dept_id");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Employees)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Employee_Users");
             });
 
             modelBuilder.Entity<EmployeeGrade>(entity =>
@@ -269,6 +278,25 @@ namespace DataModel.Models
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("user_type");
+
+                entity.Property(e => e.UserTypeId).HasColumnName("UserType");
+
+                entity.HasOne(d => d.UserTypeModel)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.UserTypeId)
+                    .HasConstraintName("FK_Users_UserType");
+            });
+
+            modelBuilder.Entity<UserType>(entity =>
+            {
+                entity.ToTable("UserType");
+
+                entity.Property(e => e.UserTypeId).HasColumnName("UserType_Id");
+
+                entity.Property(e => e.UserTypeCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("UserType_Code");
             });
 
             OnModelCreatingPartial(modelBuilder);
