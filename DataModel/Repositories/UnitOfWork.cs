@@ -15,6 +15,7 @@ namespace DataModel.Repositories
         IEmpolyeeSalaryDetailRepository IEmpolyeeSalaryDetailRepository { get; }
         IGradeRepository IGradeRepository { get; }
         IUserRepository IUserRepository { get; }
+        IUserTypeRepository IUserTypeRepository { get; }
     }
     public class UnitOfWork : IUnitOfWork
     {
@@ -27,6 +28,7 @@ namespace DataModel.Repositories
         private EmpolyeeSalaryDetailRepository _empolyeeSalaryDetailRepository;
         private GradeRepository _gradeRepository;
         private UserRepository _userRepository;
+        private UserTypeRepository _userTypeRepository;
 
         public UnitOfWork(PayRollManagementContext dataContext, IConfiguration configuration)
         {
@@ -40,6 +42,7 @@ namespace DataModel.Repositories
         public IEmpolyeeSalaryDetailRepository IEmpolyeeSalaryDetailRepository => _empolyeeSalaryDetailRepository ?? (_empolyeeSalaryDetailRepository = new EmpolyeeSalaryDetailRepository(_DataContext));
         public IGradeRepository IGradeRepository => _gradeRepository ?? (_gradeRepository = new GradeRepository(_DataContext));
         public IUserRepository IUserRepository => _userRepository ?? (_userRepository = new UserRepository(_DataContext));
+        public IUserTypeRepository IUserTypeRepository => _userTypeRepository ?? (_userTypeRepository = new UserTypeRepository(_DataContext));
         
         protected virtual void Dispose(bool disposing)
         {

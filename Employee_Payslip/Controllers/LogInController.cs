@@ -1,27 +1,41 @@
-﻿using Employee_Payslip.Models;
+﻿using DataModel.Models;
+using DataModel.Repositories;
+using Employee_Payslip.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Employee_Payslip.Controllers
 {
     public class LogInController : Controller
     {
+        private readonly IUnitOfWork _IUnitOfWork;
+
+        public LogInController(IUnitOfWork unitOfWork)
+        {
+            _IUnitOfWork = unitOfWork;
+        }
+
         public IActionResult LogIn()
         {
             return View();
         }
-
         [HttpPost]
-        public ActionResult LogIn(LogIn logIn)
+        public string Log_In(User logIn)
         {
-            if(logIn.UserId.ToLower()=="admin" && logIn.Password.ToLower() == "admin")
+            string result = string.Empty;
+            try
             {
-                Response.Redirect("Home/Index");
+                var User = _IUnitOfWork.IUserRepository.GetLogIn(logIn);
+                if (User != null)
+                {
+                    result = "Success";
+                }
             }
-            else
+            catch(Exception ex)
             {
 
             }
-            return View();
+            
+            return result;
         }
 
         public ActionResult Logout()

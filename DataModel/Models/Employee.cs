@@ -24,8 +24,10 @@ namespace DataModel.Models
         public string? EmpMailId { get; set; }
         public string? EmpPanNumber { get; set; }
         public int? DeptId { get; set; }
+        public int? UserId { get; set; }
 
         public virtual Department? Dept { get; set; }
+        public virtual User? User { get; set; }
         public virtual ICollection<EmployeeGrade> EmployeeGrades { get; set; }
         public virtual ICollection<EmpolyeeSalaryDetail> EmpolyeeSalaryDetails { get; set; }
     }
